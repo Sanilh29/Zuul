@@ -1,11 +1,15 @@
 #include <iostream>
 #include "item.h"
+#include <cstring>
 
 using namespace std;
 
-Item::Item(char* newName){
-  name = newName;
+item::item(const char* newName){
+  name = strdup(newName);
 }
-char* Item::getName(){
+item::~item(){
+  delete name;
+}
+char* item::getName(){
   return name;
 }

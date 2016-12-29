@@ -3,11 +3,12 @@
 #define ITEMH_DEFINED
 using namespace std;
 
-class Item{
+class item{
  private:
   char* name;
  public:
-  Item (char* newName);
+  item (const char* newName);
+  ~item();
   char* getName();
 };
 
