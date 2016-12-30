@@ -5,9 +5,76 @@
 #include "room.h"
 using namespace std;
 
+void roomSetup (vector<room*>* roomList);
+bool wordCompare (char* a, const char* b);
+
 int main() {
   vector<room*> roomList;
   vector<item*> inventory;
+  room* currentRoom;
+  char command[30];
+  cout << "Welcome to Zuul. Get to the closet to win." << endl;
+  bool playing = true;
+  roomSetup(&roomList);
+  currentRoom = *roomList.begin();
+  currentRoom->printDescription();
+  cout << "Enter a command: go, drop, inventory, get, or quit." << endl;
+  cin >> command;
+  cin.ignore();
+  while (playing==true){
+    cout << "Enter a command: go, drop, inventory, get, or quit." << endl;
+    cin >> command;
+    if (wordCompare(command, "go")){
+      char direction[30];
+      cout << "north, south, east, or west" << endl;
+      cin >> direction;
+      room* newRoom = currentRoom->getExit(command + 3); 
+      if (newRoom){
+	currentRoom = newRoom;
+	currentRoom->printDescription();
+	if (0== strcmp(currentRoom->getName(), "closet")){
+	  cout <<"You win! You made it to the end." << endl;
+	  playing = false;
+	 }
+      }
+    }
+    else if (wordCompare(command, "drop")){
+      currentRoom->dropItem(&inventory, command + 5);
+    }
+    else if (wordCompare(command, "get")){
+      currentRoom->moveItem(&inventory, command + 4);
+    }
+    else if (wordCompare(command, "quit")){
+      playing = false;
+    }
+    else if (wordCompare(command, "inventory")){
+      bool items = false;
+      for (vector<item*>::iterator it = inventory.begin(); it !=inventory.end(); it++){
+	cout << (*it)->getName();
+	items= true;
+      }
+      if (!items){
+	cout << "You don't have any items in your inventory yet." << endl;
+      }
+    }
+    /* cin.ignore();
+    else {
+      cout << "Please enter a command: go, drop, get, inventory, or quit." << endl;
+      }*/
+    cin.ignore();
+  }
+  for (vector<item*>::iterator it = inventory.begin(); it !=inventory.end(); it++){
+    delete *it;
+  }
+  for (vector<room*>::iterator it = roomList.begin(); it != roomList.end(); it++){
+    delete *it;
+  }
+  // vector<item*> items;
+  // items.push_back(tuxedo);
+  // items.push_back(volleyball);
+  // items.back_back(42);
+  // items.push_back(bottle);
+  // items.push_back(keys);
 }
 
 void roomSetup(vector<room*>* roomList){
@@ -69,6 +136,25 @@ void roomSetup(vector<room*>* roomList){
   gym->setExit("west", wine_cellar);
       
   dungeon->setExit("west", gym);
-     
     
+  item* tuxedo = new item ("tuxedo");
+  item* volleyball = new item ("volleyball");
+  item* movie = new item ("42");
+  item* bottle = new item ("bottle");
+  item* keys= new item ("keys");
+
+  closet->addItem(tuxedo);
+  gym->addItem(volleyball);
+  theatre->addItem(movie);
+  wine_cellar->addItem(bottle);
+  dungeon->addItem(keys);
+}
+
+bool wordCompare(char* a, const char* b){
+  for (int i=0; i < strlen(b); i++){
+    if (a[i] != b[i]){
+      return false;
+    }
+  }
+  return true;
 }
