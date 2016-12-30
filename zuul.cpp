@@ -36,13 +36,15 @@ int main() {
 	    for (vector<item*>::iterator it = inventory.begin(); it!= inventory.end(); it++){
 	      if ((strcmp((*it)->getName(),"keys"))==0){//if you have keys
 		cout <<"You win! You made it to the end." << endl;//you win
-		playing = false;
-	      }
-	      else {
-		cout << "You lose. You do not have the keys." << endl;//if you don't you lose
-		playing =false;
+		return 0;
 	      }
 	    }
+	    for (vector<item*>::iterator it = inventory.begin(); it!= inventory.end(); it++){
+              if ((strcmp((*it)->getName(),"keys"))!=0){//if you have keys
+                cout <<"You lose! You do not have the keys." << endl;//you win
+                return 0;
+              }
+            }
 	  }
 	  else {//if theres nothing in the inventory, you lose 
 	    cout <<"You don't have the keys. You lose." << endl;
