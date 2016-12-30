@@ -1,3 +1,4 @@
+//Sanil Hattangadi, creates the methods that are going to be user and the variables
 #ifndef ROOM_H
 #define ROOM_H
 
@@ -9,6 +10,7 @@
 
 using namespace std;
 
+//for the map, overload the for loop to skip compare
 struct cmp_string{
   bool operator() (char const *a, char const *b){
     return strcmp(a,b) < 0;
@@ -21,8 +23,8 @@ class room{
   vector<item*> items;
   char* description;
   char* name;
- public:
-  room(const char* newDescription, vector<room*>* roomList);
+ public://methods that are created
+  room(const char* newName, const char* newDescription, vector<room*>* roomList);
   ~room();
   char* getName();
   void moveItem(vector<item*>* inventory, char* itemName);
