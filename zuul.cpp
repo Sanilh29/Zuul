@@ -22,6 +22,7 @@ int main() {
   currentRoom = *roomList.begin();//player starts in kitchen because its the first room in roomSetup
   currentRoom->printDescription();//prints description of kitchen
   while (playing==true){
+    cout << "=======================================" << endl;
     cout << "Enter a command: go, drop, inventory, get, or quit." << endl;
     cout << "If you type go, follow it up with a direction: north, south, east, west." << endl;
     cin.getline(command, 32);
@@ -30,18 +31,23 @@ int main() {
       if (newRoom){
 	currentRoom = newRoom;
 	currentRoom->printDescription();
-	if (0== strcmp(currentRoom->getName(), "dungeon")){//winning condition
-	  cout << "You win." << endl;
-	  playing =false;
-	  /* for (vector<item*>::iterator it = inventory.begin(); inventory.end();it++){
-	     if (0==strcmp((*it)->getName,"keys")){
-	       cout <<"You win! You made it to the end." << endl;
-	       playing = false;
-	     }
-	     else {
-	       cout << "You lose. You do not have the keys." << endl;
-	     }
-	   }*/
+	if (0== strcmp(currentRoom->getName(), "dungeon")){//must be in dungeon with the keys
+	  if (inventory.begin() != inventory.end()){
+	    for (vector<item*>::iterator it = inventory.begin(); it!= inventory.end(); it++){
+	      if ((strcmp((*it)->getName(),"keys"))==0){//if you have keys
+		cout <<"You win! You made it to the end." << endl;//you win
+		playing = false;
+	      }
+	      else {
+		cout << "You lose. You do not have the keys." << endl;//if you don't you lose
+		playing =false;
+	      }
+	    }
+	  }
+	  else {//if theres nothing in the inventory, you lose 
+	    cout <<"You don't have the keys. You lose." << endl;
+	    playing =false;
+	  }
 	}
       }
     }
@@ -150,7 +156,7 @@ void roomSetup(vector<room*>* roomList){//creates new room and within the (), th
   gym->addItem(volleyball);
   theatre->addItem(movie);
   wine_cellar->addItem(bottle);
-  dungeon->addItem(keys);
+  game_room->addItem(keys);
 }
 
 bool wordCompare(char* a, const char* b){//compares the first word from the user input command to a given word
